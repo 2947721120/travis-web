@@ -1,6 +1,3 @@
-`import Ember from 'ember';`
-`import config from 'travis/config/environment'`
-
 jQuery.support.cors = true
 
 default_options =
