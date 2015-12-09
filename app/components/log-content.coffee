@@ -44,6 +44,7 @@ Object.defineProperty Log.Limit.prototype, 'limited',
 LogContentComponent = Ember.Component.extend
   popup: Ember.inject.service()
 
+  logIsVisible: false
   currentUserBinding: 'auth.currentUser'
 
   didInsertElement: ->
@@ -151,6 +152,8 @@ LogContentComponent = Ember.Component.extend
       if @get('canRemoveLog')
         @get('popup').open('remove-log-popup')
         return false
+    toggleLog: ->
+        @toggleProperty('logIsVisible')
 
   noop: -> # TODO required?
 
