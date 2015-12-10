@@ -1,5 +1,6 @@
 `import Ember from 'ember'`
 `import { githubRepo } from 'travis/utils/urls'`
+`import Config from 'travis/config/environment'`
 
 Controller = Ember.Controller.extend
   jobController: Ember.inject.controller('job')
@@ -76,16 +77,23 @@ Controller = Ember.Controller.extend
   lastBuildDidChange: ->
     Ember.run.scheduleOnce('actions', this, @_lastBuildDidChange);
 
+  lastBuildKey: ->
+    key = if Config.useV3API
+      'repo.defaultBranch.lastBuild'
+    else
+      'repo.lastBuild'
+
   _lastBuildDidChange: ->
-    build = @get('repo.defaultBranch.lastBuild')
+    build = @get(@lastBuildKey())
+    debugger
     @set('build', build)
 
   stopObservingLastBuild: ->
-    @removeObserver('repo.defaultBranch.lastBuild', this, 'lastBuildDidChange')
+    @removeObserver(@lastBuildKey(), this, 'lastBuildDidChange')
 
   observeLastBuild: ->
     @lastBuildDidChange()
-    @addObserver('repo.defaultBranch.lastBuild', this, 'lastBuildDidChange')
+    @addObserver(@lastBuildKey(), this, 'lastBuildDidChange')
 
   connectTab: (tab) ->
     # TODO: such implementation seems weird now, because we render
